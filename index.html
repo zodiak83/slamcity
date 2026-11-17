@@ -1,0 +1,82 @@
+<!doctype html>
+<html lang="ko">
+<head><meta charset="UTF-8" /><meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover" /><meta name="theme-color" content="#eeeae1" /><meta name="description" content="SLAM CITY — 타이밍, 팀워크, 그리고 마지막 한 번의 덩크. 3대3 풀코트 농구." /><link rel="icon" href="./favicon.svg" type="image/svg+xml" /><title>SLAM CITY · Own the court</title>  <script type="module" crossorigin src="./assets/index-7E43ktD4.js"></script>
+  <link rel="modulepreload" crossorigin href="./assets/three-Bz6orhrh.js">
+  <link rel="stylesheet" crossorigin href="./assets/index-DcpDbBUj.css">
+</head>
+<body>
+<div id="app">
+  <canvas id="game" tabindex="0" aria-label="3대3 농구 경기장"></canvas>
+  <div id="loading" class="loading"><span class="brand-icon">SC<span>↗</span></span><strong>코트를 준비하고 있습니다</strong><i></i></div>
+  <div id="fatal" class="fatal" hidden><h2>3D 화면을 열 수 없습니다</h2><p>브라우저의 하드웨어 가속을 켜고 다시 시도해 주세요.</p><button onclick="location.reload()">다시 시도</button></div>
+  <section id="lobby" class="lobby">
+    <header class="lobby-header"><a class="brand" href="/" aria-label="SLAM CITY 홈"><span class="brand-icon">SC<span>↗</span></span><span>SLAM CITY<small>BASKETBALL CLUB</small></span></a><div class="header-right"><span class="local-label">● LOCAL PLAY</span><button id="lobby-controls" class="controls-button">조작 설정</button><button id="help-button" class="icon-button" aria-label="조작 방법">?</button></div></header>
+    <div class="lobby-content">
+      <article class="hero">
+        <span class="eyebrow"><i></i> THE COURT IS CALLING</span>
+        <h1>SLAM<br /><span>CITY.</span><sup>↗︎</sup></h1>
+        <p class="creator-credit"><span>제작자:</span> 가락초 전승현</p>
+        <p class="hero-subtitle">승부는, 마지막 한 번의 플레이.</p>
+        <p class="hero-description">달리고, 연결하고, 림을 흔들어라.<br />당신의 팀으로 완성하는 3대3 풀코트 농구.</p>
+        <div class="game-facts"><span>3 <i>VS</i> 3</span><span>FULL COURT</span><span>2 MIN MATCH</span></div>
+        <div class="starter-header"><h2>YOUR STARTER</h2><span>당신의 플레이 스타일을 선택하세요</span></div>
+        <div id="athlete-cards" class="athlete-cards" role="group" aria-label="선수 유형 선택"></div>
+        <div class="match-options"><label>난이도<select id="difficulty"><option value="easy">루키 · 쉬움</option><option value="normal" selected>챌린저 · 보통</option><option value="hard">올스타 · 어려움</option></select></label><label>득점 규칙<select id="rules"><option value="arcade">시티 룰 · 덩크 4점 / 레이업 3점</option><option value="standard">클래식 · 2점 / 3점</option></select></label></div>
+        <div class="start-actions"><button id="start-button" class="primary-button"><span>코트 입장</span><b>PLAY NOW ↗</b></button><button id="practice-button" class="secondary-button">연습 코트 <span>→</span></button></div>
+        <p class="beginner-tip"><span>TIP</span> <span id="beginner-copy">Enter로 시작 · Tab으로 메뉴 선택 · J를 누르고 초록 구간에서 놓으면 슛!</span></p>
+      </article>
+      <div class="court-caption"><span class="court-index">01 /</span><div><strong>THE CITY GYM</strong><span>SEOUL REDS <i>vs.</i> BUSAN WAVES</span></div><span class="court-live">● 3D ARENA</span></div>
+      <div class="court-note"><span>NO SHORTCUTS.<br />JUST BASKETBALL.</span><b>↗</b></div>
+    </div>
+    <footer class="lobby-footer"><span>BUILT FOR THE LOVE OF THE GAME.</span><div><span id="record-label">첫 승리를 기다리는 중</span><button id="sound-button">♫ 사운드 ON</button></div></footer>
+  </section>
+  <section id="match-ui" class="match-ui" hidden>
+    <div class="match-brand">SC<span>↗</span></div>
+    <header class="scoreboard"><div class="team home"><span class="team-dot"></span><div><small>HOME</small><strong><span class="team-city">SEOUL </span>REDS</strong></div></div><strong id="score-home" class="score">00</strong><div class="time-box"><small id="period-label">CITY MATCH</small><strong id="game-clock">02:00</strong><span id="shot-clock">24</span></div><strong id="score-away" class="score">00</strong><div class="team away"><div><small>AWAY</small><strong><span class="team-city">BUSAN </span>WAVES</strong></div><span class="team-dot"></span></div></header>
+    <button id="pause-button" class="pause-button" aria-label="일시정지">Ⅱ <span>ESC</span></button>
+    <aside class="play-status"><span id="possession-label">YOUR BALL</span><strong id="objective-label">반대쪽 골대를 공격하세요</strong><small id="rule-label">시티 룰 · 덩크 +4 / 레이업 +3</small></aside>
+    <div id="announcement" class="announcement" aria-live="polite"><small id="announcement-kicker"></small><strong id="announcement-title"></strong><span id="announcement-detail"></span></div>
+    <div id="countdown" class="countdown" hidden><span>READY TO BALL?</span><strong>3</strong></div>
+    <aside class="player-card"><span id="jersey-number" class="jersey-number">10</span><div><small id="player-role">SLASHER / CONTROLLED</small><strong id="player-name">강태오</strong><div class="stamina-track"><i id="stamina-fill"></i></div><span id="player-stats">0 PTS · 0 REB · 0 AST</span></div></aside>
+    <section id="shot-meter" class="shot-meter" hidden><div><span>SHOT TIMING</span><b id="shot-label">초록 구간에서 놓으세요</b></div><div class="meter-track"><span class="perfect-zone"></span><i id="meter-cursor"></i></div><span id="shot-helper" class="meter-helper">J 누르기 → 초록에서 놓기</span></section>
+    <aside class="minimap-panel"><canvas id="minimap" width="148" height="240" aria-label="코트 미니맵"></canvas><span>● YOU <i>● TEAM</i></span></aside>
+    <nav class="controls-strip" aria-label="조작 안내"><span><kbd id="move-keys">W / A / S / D</kbd> 이동 · 방향키</span><span><kbd data-key="sprint">Shift</kbd> 달리기</span><span><kbd data-key="jump">Space</kbd> 점프</span><span><kbd data-key="shoot">J</kbd> 슛</span><span><kbd data-key="dunk">R</kbd> 덩크</span><span><kbd data-key="steal">E</kbd> 스틸</span><span><kbd data-key="pass">F</kbd> 패스</span><span><kbd data-key="switchPlayer">Q</kbd> 전환</span></nav>
+    <div id="touch-controls" class="touch-controls" aria-label="화면 터치 조작기">
+      <div class="touch-movement"><div id="joystick" class="joystick" role="group" aria-label="이동 조이스틱, 끝까지 밀면 달리기"><i></i><span class="joystick-cross" aria-hidden="true">+</span></div><span class="touch-hint">끝까지 밀면 달리기</span></div>
+      <div class="touch-actions"><button data-action="pass" aria-label="패스">패스</button><button data-action="jump" aria-label="점프, 블록, 리바운드">점프</button><button data-action="dunk" aria-label="골밑 덩크">덩크</button><button data-action="switchPlayer" aria-label="선수 전환">전환</button><button data-action="steal" aria-label="스틸">스틸</button><button id="touch-shoot" class="touch-shoot" aria-label="슛 버튼, 누르고 초록 구간에서 놓기"><strong>슛</strong><small>누르고 놓기</small></button></div>
+    </div>
+    <div id="fps" class="fps"></div>
+  </section>
+  <section id="pause-overlay" class="overlay" hidden><div class="modal pause-modal"><span class="eyebrow">TAKE A BREATHER</span><h2>TIME OUT.</h2><p>경기는 당신을 기다립니다.</p><button id="resume-button" class="primary-button">계속 플레이 <b>→</b></button><button id="pause-controls" class="controls-button pause-controls">조작 설정 · PC 키 변경</button><div class="settings"><label>그래픽<select id="quality"><option value="high">높음</option><option value="low">가벼움</option></select></label><label>사운드<input id="volume" type="range" min="0" max="100" value="65" aria-label="사운드 볼륨" /></label></div><div class="modal-actions"><button id="restart-button" class="text-button">경기 다시 시작</button><button id="home-button" class="text-button">로비로</button><button id="pause-help" class="text-button">조작 방법</button></div></div></section>
+  <section id="controls-overlay" class="overlay" role="dialog" aria-modal="true" aria-labelledby="controls-title" hidden>
+    <div class="modal controls-modal"><button id="close-controls" class="close-button" aria-label="조작 설정 닫기">×</button>
+      <span class="eyebrow">YOUR CONTROLS</span><h2 id="controls-title">조작 설정</h2><p>내 손에 맞게 바꾸세요. 이 브라우저에 자동 저장됩니다.</p>
+      <label class="input-mode-label">화면 터치 조작기<select id="input-mode"><option value="auto">자동 · 휴대폰에서 표시</option><option value="touch">항상 표시</option><option value="keyboard">숨김 · 키보드 사용</option></select></label>
+      <div class="mobile-instructions"><b>모바일 플레이</b><p>왼쪽 조이스틱으로 이동하고 끝까지 밀면 달립니다. 오른쪽 슛 버튼을 누른 뒤 초록 구간에서 놓으세요. 가로·세로 화면 모두 지원합니다.</p></div>
+      <details id="keyboard-section" open><summary>PC 키보드 설정 <span>동작을 누르고 새 키 입력</span></summary><div id="binding-list" class="binding-list"></div><p class="binding-note">이미 쓰는 키는 서로 교환합니다. 방향키·Esc는 항상 보조 조작으로 사용할 수 있습니다.</p></details>
+      <p id="binding-status" class="binding-status" role="status" aria-live="polite"></p>
+      <div class="controls-footer"><button id="reset-bindings" class="secondary-button">기본 키로 복원</button><button id="controls-done" class="primary-button">완료 <b>✓</b></button></div>
+    </div>
+  </section>
+  <section id="help-overlay" class="overlay" hidden><div class="modal help-modal">
+    <button id="close-help" class="close-button" aria-label="조작 안내 닫기">×</button>
+    <span class="eyebrow">KNOW YOUR GAME</span><h2>HOW TO PLAY.</h2>
+    <p>모바일은 화면 조작기, PC는 키보드로 플레이하세요. 키는 조작 설정에서 바꿀 수 있습니다.</p>
+    <div class="help-grid">
+      <span><kbd id="help-move-keys">WASD / 방향키</kbd><b>이동</b>화면의 위·아래·좌·우로 이동</span>
+      <span><kbd data-key="sprint">Shift</kbd><b>전력 질주</b>체력이 줄어들면 잠깐 쉬어가세요</span>
+      <span><kbd><span data-key="shoot">J</span> 누르기 → 놓기</kbd><b>한손 슛 / 레이업</b>터치는 슛 버튼을 누르고 초록 구간에서 놓기</span>
+      <span><kbd data-key="dunk">R</kbd><b>덩크</b>공을 들고 상대 골대 가까이에서 사용</span>
+      <span><kbd data-key="jump">Space</kbd><b>점프 / 블록 / 리바운드</b>슛이 올라갈 때 점프. 낙하지점으로 이동</span>
+      <span><kbd data-key="steal">E</kbd><b>스틸</b>상대 드리블에 가까이 붙어 타이밍 맞추기</span>
+      <span><kbd data-key="pass">F</kbd><b>패스</b>열린 동료에게 연결하고 조작 선수가 전환</span>
+      <span><kbd data-key="switchPlayer">Q</kbd><b>선수 전환</b>공과 가까운 수비 선수로 변경</span>
+      <span><kbd>Esc / <span data-key="pause">P</span></kbd><b>일시정지</b>설정, 재시작, 로비 복귀</span>
+      <span><kbd data-key="mute">M</kbd><b>음소거</b>원할 때 사운드 켜고 끄기</span>
+    </div>
+    <p class="help-rule">시티 룰: 레이업 3점 · 덩크 4점 · 3점선 밖 3점 · 안쪽 2점. 클래식은 레이업·덩크 2점.</p>
+    <button id="help-done" class="primary-button">준비됐어요 <b>↗</b></button>
+  </div></section>
+  <section id="results-overlay" class="overlay" hidden><div class="modal results-modal"><span id="result-eyebrow" class="eyebrow">FINAL BUZZER</span><h2 id="result-title">YOU OWN IT.</h2><div class="result-score"><span>SEOUL REDS<strong id="final-home">00</strong></span><i>:</i><span>BUSAN WAVES<strong id="final-away">00</strong></span></div><p id="result-detail"></p><div class="box-score"><div class="box-heading"><span>PLAYER</span><span>PTS</span><span>REB</span><span>AST</span><span>STL</span><span>BLK</span></div><div id="box-score-rows"></div></div><div class="result-actions"><button id="rematch-button" class="primary-button">다시 도전 <b>↗</b></button><button id="result-home" class="secondary-button">로비로</button></div></div></section>
+</div>
+</body></html>
